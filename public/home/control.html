@@ -1,0 +1,100 @@
+<html>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			Dashboard
+			<ul>
+				<a href='#/security'><li>
+					Security
+				</li></a>
+				<a href='#/data'><li>
+					Your Data
+				</li></a>
+				<a href='#/sharing'><li>
+					Form Sharing
+				</li></a>
+				<a href='#/api'><li>
+					API
+				</li></a>
+			</ul>
+		</nav>
+	<div class='container'>
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>Control Name</th>
+					<th>Type</th>
+					<th>Values</th>
+					<th><button class='btn btn-primary' ng-disabled="(schemaFromServer.length>0||controls.length==0)" ng-click="commitForm()">Save form <i class='fa fa-save'></i></th>
+					<th><button class='btn btn-default' style='color:red;' onclick="deleteForm()">Delete<i class='fa fa-trash'></i></th>
+				</tr>
+			</thead>
+			<tr ng-repeat='i in controls'>
+				<td>{{i.name}}</td>
+				<td>{{i.type}}</td>
+				<td>{{i.values}}</td>
+
+			</tr>
+		</table>
+	<h2>Add Form Controls</h2>
+		<div class='form-area'>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Enter name of control(required)
+				</div>
+				<input ng-disabled="(schemaFromServer.length>0)" type='text' class='text-field' placeholder='Enter name' ng-model='controlName'>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Select control type(required)
+				</div>
+					<select ng-disabled="(schemaFromServer.length>0)" ng-model='controlType' class='text-field'>
+						<option value='text'>Text</option>
+						<option value='number'>Number</option>
+						<option value='check'>Check Box</option>
+						<option value='radio'>RADIO</option>
+						<option value='text-area'>Text Area</option>
+						<option value='select'>Select Field</option>
+						<option value='date'>Date</option>
+					</select>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Control input length(if none leave blank)
+				</div>
+				<input ng-disabled="(schemaFromServer.length>0||controlType=='date'||controlType=='select'||controlType=='radio'||controlType=='check')" type='number' class='text-field' placeholder='Enter length' ng-model='controlLength'>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Helper text or question 
+				</div>
+				<input ng-disabled="(schemaFromServer.length>0)" type='text' class='text-field' placeholder='Enter helper text' ng-model='controlHelperText'>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Field placeholder
+				</div>
+				<input ng-disabled="(schemaFromServer.length>0||controlType=='select'||controlType=='radio'||controlType=='check')" type='text' class='text-field' placeholder='Enter placeholder' ng-model='controlPlaceholder'>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Required
+				</div>
+				True<input ng-disabled="(schemaFromServer.length>0||controlType=='check')" type='radio' name='required' value='true' ng-model='required' selected>
+				False<input ng-disabled="(schemaFromServer.length>0||controlType=='check')" type='radio' name='required' value='false' ng-model='required' selected>
+
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Values for select and radio
+				</div>
+					<input ng-disabled="(schemaFromServer.length>0||controlType=='date'||controlType=='text'||controlType=='text-area'||controlType=='number')" type='text' class='text-field' placeholder='Enter value' ng-model='selectValue'>
+					<button ng-disabled="(schemaFromServer.length>0||controlType=='date'||controlType=='text'||controlType=='text-area'||controlType=='number')" class='btn btn-default' ng-click='addValue()'>Add Value</button>
+			</div>
+			<div class='form-control-area'>
+				<div class='helper-text'>
+					Click below when you are done 
+				</div>
+				<button ng-click="addControl()" ng-disabled="(schemaFromServer.length>0)" class='btn btn-primary'>Add Control</button>
+		</div>
+	</div>
+						

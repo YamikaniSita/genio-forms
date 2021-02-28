@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html ng-app='app' ng-cloak>
+	<head>
+		<title>Data Collector-Dashboard</title>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/vendor/bootstrap/css/bootstrap.min.css">
+		<script type="text/javascript" src="../stylesheets/vendor/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../stylesheets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/semantic/semantic.min.css">
+		<link rel="stylesheet" type="text/css" href="../stylesheets/fontawesome/css/all.min.css">
+		<link rel="stylesheet" type="text/css" href="../stylesheets/home-style.css">
+		<script type="text/javascript" src="../javascripts/master.js"></script>
+		<script type="text/javascript" src="../javascripts/angular.js"></script>
+		<script type="text/javascript" src="../javascripts/angular-route.js"></script>
+		<script type="text/javascript" src="../javascripts/angular-resource.js"></script>
+		<script src='../javascripts/chart.js/chart.js'></script>
+	</head>
+	<body>
+	<div style='display: inline-flex;width: 100%; height: 100%;'>
+		<div class='load-pane'>	
+			<i id='spinner-pane' class='fa fa-spinner fa-pulse fa-4x fa-fw'></i>
+		</div>
+		<div class='form-list' ng-controller='myForms'>
+			<input type='text' style='display: none;' id='currentForm'>
+			<div class='heading'>
+				<h1>My Forms</h1>
+			</div>
+			<div class='form-name' ng-repeat='form in formList'>
+				<a ng-click='newForm()' href='#' onclick="changeForm(event)">
+					{{form.name}}
+				</a>
+			</div>
+			<div class='new-form'>
+				<input type='text' class='form-control' ng-model='formname' placeholder='New form name'>
+				<button class='btn btn-primary' ng-click='addForm()'>ADD <i class='fa fa-add'></i></button>
+			</div>
+		</div>
+		<div class='main-container' ng-view></div>
+	</div>
+	</body>
+	<script>
+		var app=angular.module('app', ['ngRoute', 'ngResource']);
+		//routing
+		app.config(function($routeProvider){
+			$routeProvider.when('/', {
+				templateUrl: 'no-form.html'
+			}).when('/control', {
+				templateUrl: 'control.html',
+				controller: 'control'
+			}).when('/change', {
+				templateUrl: 'change-form.html',
+				controller: 'formchange'
+			}).when('/security', {
+				templateUrl: 'security.html',
+				controller: 'security'
+			}).when('/sharing', {
+				templateUrl: 'formsharing.html',
+				controller: 'formsharing'
+			}).when('/api', {
+				templateUrl: 'api-info.html',
+				controller: 'api'
+			}).when('/data', {
+				templateUrl: 'run_query.html',
+				controller: 'data'
+			}).when('/visual', {
+				templateUrl: 'visuals.html',
+				controller: 'visual'
+			}).otherwise({
+				redirectTo: '/'
+			});
+		});
+		app.controller('myForms', function($scope, $http){
+			$scope.formList=[];
+			$http.get('../api/profile').success(function(data){
+				if(data.error){
+					//no session
+					window.location='../login';
+				}
+				else{
+					var res=data.forms;
+					var obj=[];
+					for(var x=0; x<res.length; x++){
+						obj.push({'name':res[x].name});
+					}
+					$scope.formList=obj;
+					closeLoader();
+				}
+			});
+			$scope.addForm=function(){
+				var name=$scope.formname;
+				$http.post('/api/add/'+name).success(function(data){
+					$scope.formList.push({name:data.name});
+					$scope.formname='';
+				});
+			};
+			$scope.newForm=function(){
+				window.location='#/change';
+			};
+		});
+		app.controller('control', function($rootScope, $scope, $http){
+			var selectedForm=getCurrentForm();
+			$scope.controls=[];
+			$scope.schemaFromServer=[];
+			$scope.controlType='text';
+			$scope.required='false';
+			var values=[];
+			if(!selectedForm){
+				//no form
+				window.location='#/';
+			}
+			else{
+				$http.get('/api/schema/'+selectedForm).success(function(data){
+					$scope.schemaFromServer=data[0].formSchema;
+					$scope.controls=data[0].formSchema;
+				});
+			}
+			$scope.addControl=function(){
+				var controlName=$scope.controlName;
+				var controlType=$scope.controlType;
+				var len=$scope.controlLength;
+				var req=$scope.required;
+				var helperText=$scope.controlHelperText;
+				var placeholder=$scope.controlPlaceholder;
+				if(controlName&&controlName.length>0){
+					//has a name
+					if(controlType=='radio'||controlType=='select'||controlType=='check'){
+						//select or radio
+						if(values.length>0){
+							var finalObject={name:controlName,type:controlType,required:req,values:values,helper:helperText};
+							values=[];
+							$scope.controls.push(finalObject);
+							$scope.controlName='';
+							$scope.controlType='text';
+							$scope.controlLength='';
+							$scope.required='false';
+							$scope.controlPlaceholder='';
+							$scope.controlHelperText='';
+							$scope.schemaFromServer=[];
+						}
+						else{
+							alert('No Values added. Add and try again');
+						}
+					}
+					else{
+						var finalObject={name:controlName,placeholder:placeholder,type:controlType,length:len,required:req,helper:helperText}
+						$scope.controls.push(finalObject);
+						$scope.controlName='';
+						$scope.controlType='text';
+						$scope.controlLength='';
+						$scope.required='false';
+						$scope.controlPlaceholder='';
+						$scope.controlHelperText='';
+						$scope.schemaFromServer=[];
+					}
+				}
+				else{
+					alert('Some fields not filled yet');
+				}	
+			}
+			$scope.addValue=function(){
+				var value=$scope.selectValue;
+				values.push(value);
+				$scope.selectValue='';
+			}
+			$scope.commitForm=function(){
+				$http.post('/api/save', {
+					schema:$scope.controls,
+					formName:selectedForm
+				}).success(function(data){
+					window.location='index.html';
+				});
+			}
+		});
+		app.controller('security', function($scope, $http){
+			var selectedForm=getCurrentForm();
+			if(!selectedForm){
+				//no selected form reset
+				window.location='#/';
+			}
+			else{
+				$scope.security={};
+				$scope.security.status=false;
+				$scope.security.password='';
+				$scope.change=true;
+			
+				$http.post('../api/securitystate/'+selectedForm, {
+				}).success(function(data){
+				$scope.password=data.password;
+					$scope.security.status=data.secured;
+				});
+			}
+			
+			$scope.changeState=function(){
+				var currentState=$scope.security.status;
+				if(currentState==false){
+					$scope.security.status=true;
+				}
+				else{
+					$scope.security.status=false;
+				}
+			}
+			
+			$scope.save = function(){
+				var obj={};
+				$scope.change=false;
+				obj.secured=$scope.security.status;
+				obj.password=$scope.password;
+				$http.post('../api/changesecurity/'+selectedForm, {
+					obj
+				}).success(function(data){
+					$scope.change=true;
+					alert('Successful');
+				});
+			}
+		});
+		app.controller('formsharing', function($scope){
+			if(!getCurrentForm()){
+				window.location='#/';
+			}
+			else{
+				var link='/form/'+getCurrentForm();
+				$scope.link=link;
+				}
+		});
+		app.controller('formchange', function($scope){
+			window.location='#/control';
+		});
+		app.controller('api', function($scope){
+			if(!getCurrentForm()){
+				window.location='#/';
+			}
+			else{
+				var link='/api/getaccess/'+getCurrentForm();
+				$scope.apiLink=link;
+				}
+		});
+		app.controller('data', function($scope, $http){
+			$scope.rows=[];
+			$scope.rowsToUpdate=[];
+			$scope.result=[];
+			if(!getCurrentForm()){
+				//no form
+				window.location='#/';
+			}
+			else{
+				$http.get('/api/schema/'+getCurrentForm()).success(function(data){
+					$scope.schema=data[0].formSchema;
+					$scope.selectRow=$scope.schema[0].name;
+				});
+			}
+			$scope.addRow=function(){
+				var row=$scope.selectRow;
+				//search existance of row
+				var exist=false;
+				for(var i=0; i<$scope.rowsToUpdate.length; i++){
+					if($scope.rowsToUpdate[i]===row){
+						exist=true;
+						break;//close search
+					}
+				}
+				if(exist){
+					//exists
+					$scope.selectRow=$scope.schema[0].name;
+					alert('Row already added');
+				}
+				else{
+					$scope.rows.push(row.toUpperCase());
+					$scope.rowsToUpdate.push(row);
+					$scope.selectRow=$scope.schema[0].name;
+				}
+			}
+			$scope.execute=function(){
+				if($scope.rowsToUpdate.length>0){
+					//update
+					//show query result
+					showQueryResultScreen();
+					$http.post('../api/query/'+getCurrentForm(), {
+						query: $scope.rowsToUpdate
+					}).success(function(data){
+						createRowsColumns(data);
+					}).error(function(error){
+						//revert to query screen;
+						showQueryScreen();
+						alert('System error: could not retrieve results. Try again');
+					});
+				}
+				else{
+					alert('Add rows first');
+				}
+			}
+			$scope.remove=function(r){
+				$scope.rowsToUpdate.splice($scope.rowsToUpdate.indexOf(r), 1);
+				$scope.rows.splice($scope.rowsToUpdate.indexOf(r), 1);
+			}
+		});
+		app.controller('visual', function($scope, $http){
+			var selectedForm=getCurrentForm();
+			$scope.selectFields=[];
+			$scope.httpState=false;
+			if(!selectedForm){
+				//no form
+				window.location='#/';
+			}
+			else{
+				$http.get('/api/schema/'+selectedForm).success(function(data){
+					if(data.length>0){
+						$scope.selectFields=getSelectFields(data[0].formSchema);
+						$scope.fieldName=$scope.selectFields[0].name;
+						$scope.graphType='bar';
+					}
+				});
+			}
+			$scope.startVisual=function(){
+				var fieldName=$scope.fieldName;
+				var formName=getCurrentForm();
+				//get values
+				$http.post('../api/values/'+formName, {
+					fieldName:fieldName
+				}).success(function(values){
+					//we got the values test
+					for(var i=0; i<values.length; i++){
+						var value=values[i];
+						var res=[];
+						$http.post('../api/summary/'+formName,{
+							value:value,
+							fieldName:fieldName
+						}).success(function(data){
+							res.push(data);
+						}).error(function(){
+							alert('Retry please try again');
+						});
+					}
+					var graphType=$scope.graphType;
+					buildVisual(res, graphType, fieldName);
+				}).error(function(error){
+					alert('System error try again');
+				});
+			}
+		});
+	</script>

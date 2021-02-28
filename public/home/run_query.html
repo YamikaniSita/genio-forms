@@ -1,0 +1,45 @@
+<html>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			Dashboard
+			<ul>
+				<a href='#/security'><li>
+					Security
+				</li></a>
+				<a href='#/data' style='font-weight:bold;'><li>
+					Your Data
+				</li></a>
+				<a href='#/sharing'><li>
+					Form Sharing
+				</li></a>
+				<a href='#/api'><li>
+					API
+				</li></a>
+			</ul>
+		</nav>
+		<div class='container' id='query-pane'>
+			<button class='btn btn-default' style='margin: 3px; background:blue; color:white; font-weight:bold; z-index:9999; float: right;' onclick="javascript:window.location='#/visual'"><i class='fa fa-close'></i>Visuals</button>
+			<h1>Run Query</h1>
+			<p>Select a row to include in the query below after click on add row after all need rows are added click on execute query</p>
+			<select class='form-control' ng-model='selectRow'>
+				<option ng-repeat='i in schema' value='{{i.name}}'>{{i.name}}</option>
+			</select>
+			<button class='btn btn-primary' ng-click='addRow()'>Add Query</button>
+			<h2>Current Rows</h2>
+				<table class='table'>
+					<tr ng-repeat='x in rows'>
+						<td>{{x}}</td><td><button class='btn btn-default' ng-click="remove(x)" style='background:red;'>Remove</button>
+					</tr>
+				</table>
+				<button class='btn btn-primary' ng-click='execute()'>Execute</button>
+		</div>
+		<div class='data-pane' style='display:none;'>
+			<button class='btn btn-default' style='float:right; background:red; color:white; font-weight:bold; z-index:9999;' onclick='closeResult()'><i class='fa fa-close'></i>Close</button>
+			<table class='table' id='result'>
+				<thead>
+					<tr>
+						<th ng-repeat='r in rows'>{{r}}</th>
+					</tr>
+				</thead>
+			</table>
+		</div>

@@ -1,0 +1,83 @@
+<html>
+	<body>
+	<nav class="navbar navbar-default" role="navigation">
+			Dashboard
+			<ul>
+				<a href='#/security'><li>
+					Security
+				</li></a>
+				<a href='#/data'><li>
+					Your Data
+				</li></a>
+				<a href='#/sharing'><li>
+					Form Sharing
+				</li></a>
+				<a style='font-weight:bold;' href='#/api'><li>
+					API
+				</li></a>
+			</ul>
+		</nav>
+	<div class='container'>
+		<h1>API's</h1>
+		<p>This service provides two public Programming Interfaces enabling customers
+		to integrate the data collector to there own applications. All API's are RESTful 
+		and can be integrated with any programming language which supports RESTful requests. 
+		You need an API access code to use these APIs. If you have none register one <a href='/api/generate' target='_blank'>here</a></p>
+		<hr>
+		<h1>User Access Control</h1>
+		<p>This API allows you to control who can access your forms online, for example allow only
+		your system users alone to access a form without sharing an access code.</p>
+		<h2>How it works</h2>
+		<p>You request via the API for a link for a user this link can only be used once and has an expiry time that you can set
+		NB: The form must be secured ie have an access code to use this feature. The API simply bypasses the code.</p>
+		<h1>How to use</h1>
+		<ol>
+			<li>Make a request to the API</li>
+			<p>Request must be made to the following url {{apiLink}} via POST method contained in the body
+			must be the your API key and expiry date following is an example using JQuery</p>
+			<pre>
+		$.ajax({
+			url: {{apiLink}},
+			method: "POST",
+			data: {
+			//replace with your own data
+				key: yourkey,
+				expiry: 0.1 //the expiry is set in hours in this example the link expires in 6 minutes
+			},
+			success: function(result){
+				//handle result
+				}
+			});
+			</pre>
+		<h1>The Request Response</h1>
+		<p>A successful request is an object in the following form</p>
+		<pre>
+			{response:{
+				link: link, //this will be replaced by the link to use by the specific user
+				expiry: 0.1, //the links expiry time counting has already started
+				}
+			}
+		</pre>
+		<h1>Error</h1>
+			<p>Errors that can be experienced include <strong>Form not found</strong>,
+			<strong>Form not secured</strong>, <strong>System error</strong>.</p>
+			<h2>Example</h2>
+			<pre>
+				{error:{
+					type: "form_not_secure",
+					remedy: "set_security"
+					}
+				}
+			</pre>
+		<hr>
+			<h1>Live Data API</h1>
+			<p>This API allows our customers to live track data results from collection
+			through graphs</p>
+			<h1>How to use</h1>
+				<pre>	
+					
+				<pre>
+				<p>Monitor your console for errors or successes. You need to login to your 
+				data collector dashboard on the same browser where the lIVE data will be run</p>
+				<p>A red button with the 'Live' will mean everything is set and well while a grey one means connection is either in progress or has failed
+				if the button is grey check your console for errors</p>

@@ -1,0 +1,35 @@
+<html>
+	<body>
+	<nav class="navbar navbar-default" role="navigation">
+			Dashboard
+			<ul>
+				<a href='#/security'><li>
+					Security
+				</li></a>
+				<a href='#/data'><li>
+					Your Data
+				</li></a>
+				<a href='#/sharing'><li>
+					Form Sharing
+				</li></a>
+				<a href='#/api'><li>
+					API
+				</li></a>
+			</ul>
+		</nav>
+		<div class='jumbotron'>
+			<h1>Visualize your data</h1>
+			<p>This feature works with select fields(ie radio, checkbox, select). Select
+			a field to visualise below and the type of graph below then click visualise</p>
+			<select ng-disabled="(!selectFields.length)" ng-model='fieldName' class='form-control' style='width: 200px;'>
+				<option ng-repeat='i in selectFields' value='{{i.name}}'>{{i.name}}</option>
+			</select>
+			Bar Chart <input ng-disabled="(!selectFields.length)" type='radio' name='graphType' value='bar' ng-model='graphType' class='form-control'>
+			Pie Chart <input ng-disabled="(!selectFields.length)" type='radio' name='required' value='pie' ng-model='graphType' class='form-control'>
+			Line Chart <input ng-disabled="(!selectFields.length)" type='radio' name='required' value='line' ng-model='graphType' class='form-control'>
+			<button class='btn btn-primary' ng-disabled="(!selectFields.length||httpState==true)" ng-click='startVisual()'>Visualize</button>
+		</div>
+		<div class='container'>
+			<canvas></canvas>
+		</div>
+	</body>

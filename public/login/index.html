@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Login-Data Collector</title>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/vendor/bootstrap/css/bootstrap.min.css">
+		<script type="text/javascript" src="../stylesheets/vendor/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="../stylesheets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/semantic/semantic.min.css">
+		<link rel="stylesheet" type="text/css" href="../stylesheets/fontawesome/css/all.min.css">
+		<link rel="stylesheet" type="text/css" href="../stylesheets/style.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<span class='navbar-brand'>Data Collector</span>
+			<ul class='side-menu'>
+				<li><a href='/login'>Login</a></li>
+			</ul>
+		</nav>
+		<div class='container'>
+			<div class='login-panel'>
+				<input type='number' id='cust_num' class='form-control' placeholder='Customer Number'>
+				<input type='text' id='cust_password' class='form-control' placeholder='Password'>
+				<a href='#' class='btn btn-primary' id='login'>Login</a>
+				<a href='#'>Become a customer</a>
+			</div>
+		</div>
+	<script>
+		$('#login').click(function(){
+			var cust_num=$('#cust_num').val();
+			var cust_password=$('#cust_password').val();
+			if(cust_num.length==5&&cust_password.length>=8){
+				$.ajax({
+					url: '../api/login',
+					method: 'POST',
+					data: {
+						cust_num: cust_num,
+						cust_password: cust_password
+					},
+					success: function(response){
+						if(response.message=='successful') window.location='../home/';
+						else {alert('No such customer found')};
+					}
+				})
+			}
+			else{
+				alert('Check login details and try again');
+			}
+		});
+		
+	</script>

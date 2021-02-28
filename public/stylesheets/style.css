@@ -1,0 +1,50 @@
+body {
+  padding: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #ccc;
+}
+nav{
+	border-bottom: 1px solid grey;
+	font-size: 1.4em;
+	background: white;
+}
+nav ul{
+	list-style: none;
+}
+.container{
+	padding: 10px;
+}
+.row .md-col-3{
+	width: 30%;
+	display: inline-flex;
+	border: 1px solid #ccc;
+	height: 150px;
+	background: white;
+	font-size: 1.2em;
+	margin: 5px;
+	color: black;
+	font-weight: bold
+	padding: 5px;
+	border-radius: 5px;
+}
+.md-col-3 .img-circle{
+	margin-top:20px;
+	margin-right: 5px;
+}
+.invite{
+	text-align: center;
+	font-size: 1.4em;
+	margin-top: 15px;
+}
+.login-panel{
+	width: 40%;
+	margin: auto;
+	max-width: 500px;
+	margin-top: 15px;
+}
+.login-panel input{
+	margin-bottom: 5px;
+}
+i{
+	color: green;
+}

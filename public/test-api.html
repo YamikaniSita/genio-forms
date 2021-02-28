@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<script src='javascripts/live-data.js'></script>
+		<script src='../stylesheets/vendor/jquery/jquery.min.js'></script>
+	</head>
+	<body>
+		<h1>Live Data</h1>
+		<div style='width:300px; height:200px;'></div>
+	</body>
+	<script>
+		var kdj=document.getElementsByTagName('div')[0];
+		var liveData=new LiveData('UWL4UW79DP', 'pie');
+		liveData.startApiSession(kdj, 'facebook', 'district');
+	</script>
+	

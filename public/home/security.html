@@ -1,0 +1,36 @@
+<html>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			Dashboard
+			<ul>
+				<a style='font-weight:bold;' href='#/security'><li>
+					Security
+				</li></a>
+				<a href='#/data'><li>
+					Your Data
+				</li></a>
+				<a href='#/sharing'><li>
+					Form Sharing
+				</li></a>
+				<a href='#/api'><li>
+					API
+				</li></a>
+			</ul>
+		</nav>
+		<table class='table'>
+				<tr>
+					<td>Secured</th>
+					<td>{{security.status}}</th>
+				</tr>
+				<tr>
+					<td>Change Status</td>
+					<td><button ng-click='changeState()' class='btn btn-default' ng-disabled="(security.status==true)">On</button></td>
+					<td><button ng-click='changeState()' class='btn btn-default' ng-disabled="(security.status==false)">Off</button></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input class='form-control' value="{{security.password}}" type='text' ng-model="password" ng-disabled="(security.status==false)">
+				</tr>
+				<td>Save Changes</td><td><button class='btn btn-default' ng-disabled="(change==false)" ng-click="save()">Save</button>
+		</table>
+	</body>

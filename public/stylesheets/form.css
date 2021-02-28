@@ -1,0 +1,80 @@
+.container{
+	margin: auto;
+	max-width: 40%;
+	padding: 10px;
+	font-size: 1em;
+}
+.container h1{
+	text-align: center;
+	text-decoration: underline;
+	color: red;
+}
+.form-field{
+	padding: 5px;
+	margin: 5px;
+	font-family: verdana;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background: #ddd;
+}
+input[type='text']{
+	width: 100%;
+	margin: 5px;
+	padding: 5px;
+	background: #ddd;
+	color: blue;
+	border: 0px;
+	border-bottom: 2px solid black;
+}
+input[type='date']{
+	width: 100%;
+	margin: 5px;
+	padding: 5px;
+	background: #ddd;
+	color: blue;
+	border: 0px;
+	border-bottom: 2px solid black;
+}
+input[type='password']{
+	width: 100%;
+	margin: 5px;
+	padding: 5px;
+	background: #ddd;
+	color: blue;
+	border: 0px;
+	border-bottom: 2px solid black;
+}
+input[type='number']{
+	width: 100%;
+	margin: 5px;
+	padding: 5px;
+	background: #ddd;
+	color: blue;
+	border: 0px;
+	border-bottom: 2px solid black;
+}
+input[type='radio']{
+	margin: 3px;
+}
+input[type='checkbox']{
+	margin: 3px;
+}
+textarea{
+	height:100px; width:100%;
+	margin: 5px;
+	padding: 5px;
+	background: #ddd;
+	color: blue;
+	border: 2px solid black;
+	border-radius: 5px;
+}
+select{
+	width: 100%;
+	height: 40px;
+}
+option{
+	height: 10px;
+}
+.helper{
+	font-weight: bold;
+}
