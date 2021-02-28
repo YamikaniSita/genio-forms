@@ -1,7 +1,7 @@
 var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
 
-var ApiSchema=new Schema({
+var APISchema=new Schema({
 	customer_id:{
 		type: Number,
 		required: true
@@ -11,4 +11,4 @@ var ApiSchema=new Schema({
 	}
 });
 
-module.exports=mongoose.model('APIkey', ApiSchema);
+module.exports=mongoose.model('APIkey', APISchema);
