@@ -4,6 +4,6 @@ Create forms with multiple controls. Data stored in MongoDB and displayed using 
 
 Contains an API to enable live data extraction and single link access.
 
-Requires Node.js, MongoDB installed 
+Requires Node.js, MongoDB, express installed 
 
 YAMIKANI SITA, Mzuzu University, ICT Department contact: sitayamikani@gmail.com
